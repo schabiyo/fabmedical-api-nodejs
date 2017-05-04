@@ -17,4 +17,4 @@ inputs:
   - name: api-nodejs
 
 run:
-  path: api-nodejs/tasks/build-and-test.sh
+  path: api-nodejs/ci/tasks/build-and-test.sh

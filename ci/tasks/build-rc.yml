@@ -17,4 +17,4 @@ inputs:
   - name: api-nodejs
 
 run:
-  path: api-nodejs/tasks/build-rc.sh
+  path: api-nodejs/ci/tasks/build-rc.sh
