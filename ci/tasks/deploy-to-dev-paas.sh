@@ -15,7 +15,7 @@ echo "Image version: "
 
 az login --service-principal -u "$service_principal_id" -p "$service_principal_secret" --tenant "$tenant_id"
 az account set --subscription "$subscription_id"
-az appservice web config container update -n $server_prefix-api-nodejs -g ossdemo-paas \
+az appservice web config container update -n $server_prefix-api-nodejs -g $paas_rg \
     --docker-registry-server-password $acr_password \
     --docker-registry-server-user $acr_username \
     --docker-registry-server-url $acr_endpoint \

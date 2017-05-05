@@ -12,6 +12,7 @@ params:
   service_principal_secret:
   tenant_id:
   subscription_id:
+  paas_rg:
   server_prefix:
   acr_endpoint:
   acr_username:
