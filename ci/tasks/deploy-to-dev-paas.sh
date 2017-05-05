@@ -4,9 +4,8 @@ set -e -x
 
 
 echo "Deploying to DEV PAAS"
-
-echo "Image version: "$image-version
-cat api-version/number
+img_tag=$(<api-version/number)
+echo "Image version: "$img_tag
 
 #touch tag-out/rc_tag
 #echo "1.0.1" >> tag-out/rc_tag
@@ -19,5 +18,5 @@ az appservice web config container update -s dev -n $server_prefix-api-nodejs -g
     --docker-registry-server-password $acr_password \
     --docker-registry-server-user $acr_username \
     --docker-registry-server-url $acr_endpoint \
-    --docker-custom-image-name $acr_endpoint/ossdemo/api-nodejs
+    --docker-custom-image-name $acr_endpoint/ossdemo/api-nodejs:$img_tag
 
