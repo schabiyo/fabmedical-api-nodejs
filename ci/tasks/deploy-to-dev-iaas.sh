@@ -14,8 +14,8 @@ mkdir ~/.ssh
 printf "%s\n" "-----BEGIN RSA PRIVATE KEY-----" >> ~/.ssh/id_rsa
 printf "%s\n" $server_ssh_private_key | tail -n +5 | head -n -4 >>  ~/.ssh/id_rsa
 printf "%s" "-----END RSA PRIVATE KEY-----" >> ~/.ssh/id_rsa
-
 echo $server_ssh_public_key >> ~/.ssh/id_rsa.pub
+chmod 600 ~/.ssh/id_rsa*
 
 api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 
