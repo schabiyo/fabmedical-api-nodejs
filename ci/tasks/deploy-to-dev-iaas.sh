@@ -19,18 +19,18 @@ chmod 600 ~/.ssh/id_rsa*
 
 api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 
-touch api-nodejs/ansible/docker-hosts
-printf "%s\n" "[dockerhosts]" >> api-nodejs/ansible/docker-hosts
-printf "%s\n" "web1-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ansible/docker-hosts
-printf "%s\n" "web2-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ansible/docker-hosts
+touch api-nodejs/ci/tasks/ansible/docker-hosts
+printf "%s\n" "[dockerhosts]" >> api-nodejs/ci/tasks/ansible/docker-hosts
+printf "%s\n" "web1-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
+printf "%s\n" "web2-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tassks/ansible/docker-hosts
 
-sed -i -e "s@VALUEOF-DEMO-ADMIN-USER-NAME@${server_admin_username}@g" api-nodejs/ansible/playbook-iaas-docker-deploy.yml
-sed -i -e "s@VALUEOF-REGISTRY-SERVER-NAME@${acr_endpoint}@g" api-nodejs/ansible/playbook-iaas-docker-deploy.yml
-sed -i -e "s@VALUEOF-REGISTRY-USER-NAME@${acr_username}@g" api-nodejs/ansible/playbook-iaas-docker-deploy.yml
-sed -i -e "s@VALUEOF-REGISTRY-PASSWORD@${acr_password}@g" api-nodejs/ansible/playbook-iaas-docker-deploy.yml
-sed -i -e "s@VALUEOF-IMAGE-REPOSITORY@${api_repository}@g" api-nodejs/ansible/playbook-iaas-docker-deploy.yml
+sed -i -e "s@VALUEOF-DEMO-ADMIN-USER-NAME@${server_admin_username}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
+sed -i -e "s@VALUEOF-REGISTRY-SERVER-NAME@${acr_endpoint}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
+sed -i -e "s@VALUEOF-REGISTRY-USER-NAME@${acr_username}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
+sed -i -e "s@VALUEOF-REGISTRY-PASSWORD@${acr_password}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
+sed -i -e "s@VALUEOF-IMAGE-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 
-cd ansible
+cd api-nodejs/ci/tasks/ansible
  ansible-playbook -i docker-hosts ansible-iaas-docker-deploy.yml
 cd ..
 
