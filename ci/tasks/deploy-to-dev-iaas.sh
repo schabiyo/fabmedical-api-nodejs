@@ -22,7 +22,7 @@ api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 touch api-nodejs/ci/tasks/ansible/docker-hosts
 printf "%s\n" "[dockerhosts]" >> api-nodejs/ci/tasks/ansible/docker-hosts
 printf "%s\n" "web1-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
-printf "%s\n" "web2-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tassks/ansible/docker-hosts
+printf "%s\n" "web2-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
 
 sed -i -e "s@VALUEOF-DEMO-ADMIN-USER-NAME@${server_admin_username}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 sed -i -e "s@VALUEOF-REGISTRY-SERVER-NAME@${acr_endpoint}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
