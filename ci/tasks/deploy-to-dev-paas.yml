@@ -22,7 +22,6 @@ params:
 
 inputs:
   - name: api-nodejs
-outputs:
-  - name: tag-out
+  - name: api-version
 run:
   path: api-nodejs/ci/tasks/deploy-to-dev-paas.sh
