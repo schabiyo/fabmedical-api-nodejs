@@ -8,6 +8,10 @@ image_resource:
     tag: latest
 
 params:
+  service_principal_id:
+  service_principal_secret:
+  tenant_id:
+  subscription_id:
   server_prefix:
   acr_endpoint:
   acr_username:
