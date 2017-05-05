@@ -39,12 +39,3 @@ echo -e "${BOLD}Browse application...${RESET}"
 echo -e ".you can now browse the application at http://svr1-VALUEOF-UNIQUE-SERVER-PREFIX.eastus.cloudapp.azure.com for individual servers."
 echo -e ". or at http://VALUEOF-UNIQUE-SERVER-PREFIX-iaas-demo.eastus.cloudapp.azure.com for a loadbalanced IP."
 
-
-az login --service-principal -u "$service_principal_id" -p "$service_principal_secret" --tenant "$tenant_id"
-az account set --subscription "$subscription_id"
-az appservice web config container update -s dev -n $server_prefix-api-nodejs -g $paas_rg \
-    --docker-registry-server-password $acr_password \
-    --docker-registry-server-user $acr_username \
-    --docker-registry-server-url $acr_endpoint \
-    --docker-custom-image-name $acr_endpoint/ossdemo/api-nodejs:$img_tag
-
