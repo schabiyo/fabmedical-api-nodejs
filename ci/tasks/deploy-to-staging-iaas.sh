@@ -2,7 +2,7 @@
 
 set -e -x
 
-echo "Deploying to DEV PAAS"
+echo "Deploying to STAGING IAAS"
 img_tag=$(<api-version/number)
 echo "Image version: "$img_tag
 
@@ -21,7 +21,7 @@ api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 
 touch api-nodejs/ci/tasks/ansible/docker-hosts
 printf "%s\n" "[dockerhosts]" >> api-nodejs/ci/tasks/ansible/docker-hosts
-printf "%s\n" "dev-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
+printf "%s\n" "staging-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
 #printf "%s\n" "staging-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
 
 sed -i -e "s@VALUEOF-DEMO-ADMIN-USER-NAME@${server_admin_username}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
@@ -34,5 +34,5 @@ cd api-nodejs/ci/tasks/ansible
  ansible-playbook -i docker-hosts playbook-iaas-docker-deploy.yml --private-key ~/.ssh/id_rsa
 cd ..
 
-echo -e ".you can now browse the application at http://dev-${server_prefix}.${server_location}.cloudapp.azure.com for individual servers."
+echo -e ".you can now browse the application at http://staging-${server_prefix}.${server_location}.cloudapp.azure.com for individual servers."
 
