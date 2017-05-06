@@ -29,7 +29,7 @@
     become: true
 
   - name: Start the DOCKER container
-    command: docker run -d -p 80:3001 --name=api-nodejs VALUEOF-IMAGE-REPOSITORY
+    command: docker run -d -p 81:3001 --name=api-nodejs VALUEOF-IMAGE-REPOSITORY
     become: true
 
 

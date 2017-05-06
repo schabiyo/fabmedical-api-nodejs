@@ -21,8 +21,8 @@ api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 
 touch api-nodejs/ci/tasks/ansible/docker-hosts
 printf "%s\n" "[dockerhosts]" >> api-nodejs/ci/tasks/ansible/docker-hosts
-printf "%s\n" "web1-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
-printf "%s\n" "web2-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
+printf "%s\n" "dev-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
+#printf "%s\n" "staging-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
 
 sed -i -e "s@VALUEOF-DEMO-ADMIN-USER-NAME@${server_admin_username}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 sed -i -e "s@VALUEOF-REGISTRY-SERVER-NAME@${acr_endpoint}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
@@ -34,8 +34,6 @@ cd api-nodejs/ci/tasks/ansible
  ansible-playbook -i docker-hosts playbook-iaas-docker-deploy.yml --private-key ~/.ssh/id_rsa
 cd ..
 
-echo ""
-echo -e "${BOLD}Browse application...${RESET}"
-echo -e ".you can now browse the application at http://svr1-VALUEOF-UNIQUE-SERVER-PREFIX.eastus.cloudapp.azure.com for individual servers."
+echo -e ".you can now browse the application at http://dev-VALUEOF-UNIQUE-SERVER-PREFIX.eastus.cloudapp.azure.com for individual servers."
 echo -e ". or at http://VALUEOF-UNIQUE-SERVER-PREFIX-iaas-demo.eastus.cloudapp.azure.com for a loadbalanced IP."
 
