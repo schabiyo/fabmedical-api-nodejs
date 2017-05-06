@@ -31,7 +31,7 @@ sed -i -e "s@VALUEOF-REGISTRY-PASSWORD@${acr_password}@g" api-nodejs/ci/tasks/an
 sed -i -e "s@VALUEOF-IMAGE-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 
 cd api-nodejs/ci/tasks/ansible
- ansible-playbook -i docker-hosts playbook-iaas-docker-deploy.yml
+ ansible-playbook -i docker-hosts playbook-iaas-docker-deploy.yml --private-key ~/.ssh/id_rsa
 cd ..
 
 echo ""
