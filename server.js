@@ -13,7 +13,7 @@ routes(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Resource Not Found....');
+  var err = new Error('Oups !!! Resource Not Found....');
   err.status = 404;
   next(err);
 });
