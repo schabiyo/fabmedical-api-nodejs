@@ -33,11 +33,21 @@ echo "create secret to login to the private registry"
         --docker-username=$acr_username \
         --docker-password=$acr_password \
         --docker-email=schabiy@microsoft.com
-~/kubectl delete deployment api-nodejs
 
-~/kubectl run api-nodejs --image $acr_endpoint/ossdemo/api-nodejs:$img_tag --port=3001
+~/kubectl create -f K8S-deploy-file.yml
+echo "-------------------------"
 
-~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer
+sed -i -e "s@API-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/api-deploy-dev.yml
 
-#Wait unitl we get an external IP
-~/kubectl get svc
+API-NODEJS-IMAGE
+echo "Initial deployment & expose the service"
+~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer --name=api-nodejs
+
+echo "Deployment complete."
+
+echo ".kubectl get services"
+~/kubectl get services
+
+echo ".kubectl get pods"
+~/kubectl get pods
+
