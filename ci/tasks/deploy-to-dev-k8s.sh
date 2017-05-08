@@ -16,6 +16,16 @@ az account set --subscription "$subscription_id"
 
 az acs kubernetes install-cli --install-location ~/kubectl
 
+mkdir ~/.ssh
+#Had to do this as the key is being read in one single line
+printf "%s\n" "-----BEGIN RSA PRIVATE KEY-----" >> ~/.ssh/id_rsa
+printf "%s\n" $server_ssh_private_key | tail -n +5 | head -n -4 >>  ~/.ssh/id_rsa
+printf "%s" "-----END RSA PRIVATE KEY-----" >> ~/.ssh/id_rsa
+echo $server_ssh_public_key >> ~/.ssh/id_rsa.pub
+chmod 600 ~/.ssh/id_rsa*
+
+api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
+
 az acs kubernetes get-credentials --resource-group=$acs_rg --name k8s-$server_prefix
 
 kubectl run api-nodejs --image $acr_endpoint/ossdemo/api-nodejs:$img_tag
