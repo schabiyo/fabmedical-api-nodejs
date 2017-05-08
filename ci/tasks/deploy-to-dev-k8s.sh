@@ -39,6 +39,7 @@ echo ".kubectl get services"
 
 externalIP="pending"
 while [[ $externalIP == *"endin"*  ]]; do
+  sleep 30s
   line=$(~/kubectl get services | grep 'api-nodejs')
   IFS=' '
   echo $line
