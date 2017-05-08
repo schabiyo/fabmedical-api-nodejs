@@ -28,7 +28,9 @@ api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 
 az acs kubernetes get-credentials --resource-group=$acs_rg --name k8s-$server_prefix
 
-~/kubectl run api-nodejs --image $acr_endpoint/ossdemo/api-nodejs:$img_tag
+~/kubectl delete deployment api-nodejs
+
+~/kubectl run api-nodejs --image $acr_endpoint/ossdemo/api-nodejs:$img_tag --port=3001
 
 ~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer
 
