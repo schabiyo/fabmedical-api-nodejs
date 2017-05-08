@@ -28,9 +28,9 @@ api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 
 az acs kubernetes get-credentials --resource-group=$acs_rg --name k8s-$server_prefix
 
-kubectl run api-nodejs --image $acr_endpoint/ossdemo/api-nodejs:$img_tag
+~/kubectl run api-nodejs --image $acr_endpoint/ossdemo/api-nodejs:$img_tag
 
-kubectl expose deployments nginx --port=80 --type=LoadBalancer
+~/kubectl expose deployments api-nodejs --port=80 --type=LoadBalancer
 
 #Wait unitl we get an external IP
-kubectl get svc
+~/kubectl get svc
