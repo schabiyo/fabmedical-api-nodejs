@@ -27,7 +27,12 @@ chmod 600 ~/.ssh/id_rsa*
 api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 
 az acs kubernetes get-credentials --resource-group=$acs_rg --name k8s-$server_prefix
-
+echo "create secret to login to the private registry"
+~/kubectl create secret docker-registry ossdemoregistrykey \
+        --docker-server=$acr_endpoint \
+        --docker-username=$acr_username \
+        --docker-password=$acr_password \
+        --docker-email=schabiy@microsoft.com
 ~/kubectl delete deployment api-nodejs
 
 ~/kubectl run api-nodejs --image $acr_endpoint/ossdemo/api-nodejs:$img_tag --port=3001
