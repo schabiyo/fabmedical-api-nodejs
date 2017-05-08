@@ -38,7 +38,7 @@ echo "Initial deployment & expose the service"
 echo ".kubectl get services"
 
 externalIP="pending"
-while [ $externalIP == *"pending"*  ]; do
+while [[ $externalIP == *"endin"*  ]]; do
   line=$(~/kubectl get services | grep 'api-nodejs')
   IFS=' '
   echo $line
