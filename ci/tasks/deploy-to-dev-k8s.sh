@@ -29,12 +29,9 @@ api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 az acs kubernetes get-credentials --resource-group=$acs_rg --name k8s-$server_prefix
 echo "create secret to login to the private registry"
 
-~/kubectl create -f K8S-deploy-file.yml
-echo "-------------------------"
-
 sed -i -e "s@API-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/api-deploy-dev.yml
 
-API-NODEJS-IMAGE
+~/kubectl create -f api-nodejs/ci/tasks/k8s/api-deploy-dev.yml
 echo "Initial deployment & expose the service"
 ~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer --name=api-nodejs
 
