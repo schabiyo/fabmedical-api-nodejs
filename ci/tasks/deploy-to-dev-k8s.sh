@@ -30,7 +30,7 @@ az acs kubernetes get-credentials --resource-group=$acs_rg --name k8s-$server_pr
 
 ~/kubectl run api-nodejs --image $acr_endpoint/ossdemo/api-nodejs:$img_tag
 
-~/kubectl expose deployments api-nodejs --port=80 --type=LoadBalancer
+~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer
 
 #Wait unitl we get an external IP
 ~/kubectl get svc
