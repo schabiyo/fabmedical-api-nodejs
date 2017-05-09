@@ -35,19 +35,14 @@ sed -i -e "s@API-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/
 echo "Initial deployment & expose the service"
 ~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer --name=api-nodejs
 
-echo ".kubectl get services"
-
 externalIP="pending"
 while [[ $externalIP == *"endin"*  ]]; do
+  echo "Waiting for the service to get exposed..."
   sleep 30s
   line=$(~/kubectl get services | grep 'api-nodejs')
   IFS=' '
-  echo $line
   read -r -a array <<< "$line"
-  echo "External IP=$externalIP"
   externalIP="${array[2]}"
 done
 
 echo "The API Service is exposed on :$externalIP "
-~/kubectl get pods
-

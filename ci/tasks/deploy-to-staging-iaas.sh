@@ -34,5 +34,5 @@ cd api-nodejs/ci/tasks/ansible
  ansible-playbook -i docker-hosts playbook-iaas-docker-deploy.yml --private-key ~/.ssh/id_rsa
 cd ..
 
-echo -e ".you can now browse the application at http://staging-${server_prefix}.${server_location}.cloudapp.azure.com for individual servers."
+echo -e ".you can now browse the application at http://staging-${server_prefix}.${server_location}.cloudapp.azure.com."
 
