@@ -31,6 +31,14 @@ echo "create secret to login to the private registry"
 
 sed -i -e "s@API-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/api-deploy-dev.yml
 
+#Delete current deployment first
+check=$(~/kubectl get deployment -l app=api-nodejs,env=dev)
+if [[ $check != *"NotFound"* ]]; then
+  echo "Deleting existent deployment"
+  ~/kubectl delete deployment -l app=api-nodejs,env=dev
+  ~/kubectl delete svc -l app=api-nodejs,env=dev 
+fi
+
 ~/kubectl create -f api-nodejs/ci/tasks/k8s/api-deploy-dev.yml
 echo "Initial deployment & expose the service"
 ~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer --name=api-nodejs
