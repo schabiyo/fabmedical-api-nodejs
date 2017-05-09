@@ -9,7 +9,7 @@ spec:
       # generated from the deployment name
       labels:
         app: api-nodejs
-        env: prod
+        env: staging
     spec:
       containers:
       - name: api-nodejs
