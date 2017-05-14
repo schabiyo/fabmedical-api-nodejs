@@ -31,23 +31,35 @@ echo "create secret to login to the private registry"
 
 sed -i -e "s@API-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/api-deploy-dev.yml
 
+
+set +e
 #Delete current deployment first
-check=$(~/kubectl get deployment -l app=api-nodejs,env=dev)
+check=$(~/kubectl get deployment api-nodejs --namespace ossdemo-dev)
 if [[ $check != *"NotFound"* ]]; then
   echo "Deleting existent deployment"
-  ~/kubectl delete deployment -l app=api-nodejs,env=dev
-  ~/kubectl delete svc -l app=api-nodejs,env=dev 
+  result=$(eval ~/kubectl delete deployment api-nodejs --namespace ossdemo-dev)
+  echo result
 fi
 
-~/kubectl create -f api-nodejs/ci/tasks/k8s/api-deploy-dev.yml
+check=$(~/kubectl get svc api-nodejs --namespace ossdemo-dev)
+if [[ $check != *"NotFound"* ]]; then
+  echo "Deleting existent  service"
+  result=$(eval ~/kubectl delete svc api-nodejs --namespace ossdemo-dev)
+  echo result
+fi
+
+set -e
+
+
+~/kubectl create -f api-nodejs/ci/tasks/k8s/api-deploy-dev.yml --namespace=ossdemo-dev
 echo "Initial deployment & expose the service"
-~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer --name=api-nodejs
+~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer --name=api-nodejs --namespace=ossdemo-dev
 
 externalIP="pending"
 while [[ $externalIP == *"endin"*  ]]; do
   echo "Waiting for the service to get exposed..."
   sleep 30s
-  line=$(~/kubectl get services | grep 'api-nodejs')
+  line=$(~/kubectl get services --namespace=ossdemo-dev| grep 'api-nodejs')
   IFS=' '
   read -r -a array <<< "$line"
   externalIP="${array[2]}"
