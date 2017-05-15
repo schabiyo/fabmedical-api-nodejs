@@ -44,7 +44,7 @@ set -e
 
 ~/kubectl create -f api-nodejs/ci/tasks/k8s/api-deploy.yml --namespace=ossdemo-prod
 echo "Initial deployment & expose the service"
-~/kubectl expose deployments api-nodejs --port=80 --target-port=3000 --type=LoadBalancer --name=api-nodejs --namespace=ossdemo-prod
+~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer --name=api-nodejs --namespace=ossdemo-prod
 
 externalIP="pending"
 while [[ $externalIP == *"endin"*  ]]; do
