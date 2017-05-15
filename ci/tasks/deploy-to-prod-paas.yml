@@ -13,15 +13,11 @@ params:
   tenant_id:
   subscription_id:
   paas_rg:
-  server_admin_username:
-  server_location:
+  location:
   server_prefix:
   acr_endpoint:
   acr_username:
   acr_password:
-  server_ssh_private_key:
-  server_ssh_public_key:
-
   
 
 
@@ -29,4 +25,4 @@ inputs:
   - name: api-nodejs
   - name: api-version
 run:
-  path: api-nodejs/ci/tasks/deploy-to-staging-iaas.sh
+  path: api-nodejs/ci/tasks/deploy-to-prod-paas.sh
