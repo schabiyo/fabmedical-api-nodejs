@@ -22,7 +22,7 @@ api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 az acs kubernetes get-credentials --resource-group=$acs_rg --name k8s-$server_prefix
 echo "create secret to login to the private registry"
 
-sed -i -e "s@WEB-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/api-deploy.yml
+sed -i -e "s@API-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/api-deploy.yml
 
 set +e
 #Delete current deployment first
@@ -56,4 +56,4 @@ while [[ $externalIP == *"endin"*  ]]; do
   externalIP="${array[2]}"
 done
 
-echo "The WEB app is exposed on :$externalIP "
+echo "The API service is exposed on :$externalIP "
