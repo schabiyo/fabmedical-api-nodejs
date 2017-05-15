@@ -21,7 +21,7 @@ params:
 
 
 inputs:
-  - name: web-nodejs
-  - name: web-version
+  - name: api-nodejs
+  - name: api-version
 run:
-  path: web-nodejs/ci/tasks/deploy-to-prod-k8s.sh
+  path: api-nodejs/ci/tasks/deploy-to-prod-k8s.sh
