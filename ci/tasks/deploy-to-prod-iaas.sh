@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -e -x
+set -e
 
-echo "Deploying to STAGING IAAS"
+echo "Deploying to PROD PAAS"
 img_tag=$(<api-version/number)
 echo "Image version: "$img_tag
 
@@ -18,21 +18,23 @@ echo $server_ssh_public_key >> ~/.ssh/id_rsa.pub
 chmod 600 ~/.ssh/id_rsa*
 
 api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
-
+api_endpoint="http://prod-${server_prefix}.${location}.cloudapp.azure.com:81"
 touch api-nodejs/ci/tasks/ansible/docker-hosts
 printf "%s\n" "[dockerhosts]" >> api-nodejs/ci/tasks/ansible/docker-hosts
-printf "%s\n" "staging-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
-#printf "%s\n" "staging-${server_prefix}.${server_location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
+printf "%s\n" "prod-${server_prefix}.${location}.cloudapp.azure.com" >> api-nodejs/ci/tasks/ansible/docker-hosts
+#printf "%s\n" "staging-${server_prefix}.${server_location}.cloudapp.azure.com" >> web-nodejs/ci/tasks/ansible/docker-hosts
 
 sed -i -e "s@VALUEOF-DEMO-ADMIN-USER-NAME@${server_admin_username}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 sed -i -e "s@VALUEOF-REGISTRY-SERVER-NAME@${acr_endpoint}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 sed -i -e "s@VALUEOF-REGISTRY-USER-NAME@${acr_username}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 sed -i -e "s@VALUEOF-REGISTRY-PASSWORD@${acr_password}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 sed -i -e "s@VALUEOF-IMAGE-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
+sed -i -e "s@VALUEOF-API-ENDPOINT@${api_endpoint}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
+API_ENDPOINT=VALUEOF-API-ENDPOINT
 
 cd api-nodejs/ci/tasks/ansible
  ansible-playbook -i docker-hosts playbook-iaas-docker-deploy.yml --private-key ~/.ssh/id_rsa
 cd ..
 
-echo -e ".you can now browse the application at http://staging-${server_prefix}.${server_location}.cloudapp.azure.com."
+echo -e ".you can now browse the application at http://prod-${server_prefix}.${location}.cloudapp.azure.com for individual servers."
 

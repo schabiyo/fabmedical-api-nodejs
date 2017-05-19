@@ -20,3 +20,4 @@ az appservice web config container update -s dev -n $server_prefix-api-nodejs -g
     --docker-registry-server-url $acr_endpoint \
     --docker-custom-image-name $acr_endpoint/ossdemo/api-nodejs:$img_tag
 
+az appservice web config appsettings update --setting PORT=3001 -g $paas_rg -n $server_prefix-api-nodejs

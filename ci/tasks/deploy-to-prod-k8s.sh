@@ -1,15 +1,8 @@
 #!/bin/bash
 
-set -e -x
-
-echo "Deploying to STAGING K8s"
+echo "Deploying to PROD K8s"
 img_tag=$(<api-version/number)
 echo "Image version: "$img_tag
-
-#touch tag-out/rc_tag
-#echo "1.0.1" >> tag-out/rc_tag
-## Config the Docker Container
-# 1-Login to Azure using the az command line
 
 az login --service-principal -u "$service_principal_id" -p "$service_principal_secret" --tenant "$tenant_id"
 az account set --subscription "$subscription_id"
@@ -29,28 +22,38 @@ api_repository=$acr_endpoint/ossdemo/api-nodejs:$img_tag
 az acs kubernetes get-credentials --resource-group=$acs_rg --name k8s-$server_prefix
 echo "create secret to login to the private registry"
 
-sed -i -e "s@API-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/api-deploy-staging.yml
+sed -i -e "s@API-NODEJS-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/k8s/api-deploy.yml
 
+set +e
 #Delete current deployment first
-check=$(~/kubectl get deployment -l app=api-nodejs,env=staging)
+check=$(~/kubectl get deployment api-nodejs --namespace ossdemo-prod)
 if [[ $check != *"NotFound"* ]]; then
   echo "Deleting existent deployment"
-  ~/kubectl delete deployment -l app=api-nodejs,env=staging
-  ~/kubectl delete svc -l app=api-nodejs,env=staging
+  result=$(eval ~/kubectl delete deployment api-nodejs --namespace ossdemo-prod)
+  echo result 
 fi
 
-~/kubectl create -f api-nodejs/ci/tasks/k8s/api-deploy-staging.yml
+check=$(~/kubectl get svc api-nodejs --namespace ossdemo-prod)
+if [[ $check != *"NotFound"* ]]; then
+  echo "Deleting existent  service"
+  result=$(eval ~/kubectl delete svc api-nodejs --namespace ossdemo-prod)
+  echo result
+fi
+
+set -e
+
+~/kubectl create -f api-nodejs/ci/tasks/k8s/api-deploy.yml --namespace=ossdemo-prod
 echo "Initial deployment & expose the service"
-~/kubectl expose deployments --port=80 --target-port=3001 --type=LoadBalancer -l app=api-nodejs,env=staging
+~/kubectl expose deployments api-nodejs --port=80 --target-port=3001 --type=LoadBalancer --name=api-nodejs --namespace=ossdemo-prod
 
 externalIP="pending"
 while [[ $externalIP == *"endin"*  ]]; do
   echo "Waiting for the service to get exposed..."
   sleep 30s
-  line=$(~/kubectl get services | grep 'api-nodejs')
+  line=$(~/kubectl get services --namespace ossdemo-prod | grep 'api-nodejs')
   IFS=' '
   read -r -a array <<< "$line"
   externalIP="${array[2]}"
 done
 
-echo "The API Service is exposed on :$externalIP "
+echo "The API service is exposed on :$externalIP "
