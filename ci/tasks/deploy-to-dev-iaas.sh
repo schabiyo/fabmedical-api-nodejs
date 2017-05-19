@@ -30,6 +30,19 @@ sed -i -e "s@VALUEOF-REGISTRY-USER-NAME@${acr_username}@g" api-nodejs/ci/tasks/a
 sed -i -e "s@VALUEOF-REGISTRY-PASSWORD@${acr_password}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 sed -i -e "s@VALUEOF-IMAGE-REPOSITORY@${api_repository}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
 
+
+echo "App insight key = ${appinsight_key}"
+if [[ ! -z $appinsight_key ]]; then
+  echo "setting app insight key"
+  arg="-e APPINSIGHTS_INSTRUMENTATIONKEY=${appinsight_key}"
+  sed -i -e "s@VALUEOF_APPINSIGHT_KEY@${arg}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
+
+else
+  arg=""
+  echo "no key found"
+  sed -i -e "s@VALUEOF_APPINSIGHT_KEY@${arg}@g" api-nodejs/ci/tasks/ansible/playbook-iaas-docker-deploy.yml
+fi
+
 cd api-nodejs/ci/tasks/ansible
  ansible-playbook -i docker-hosts playbook-iaas-docker-deploy.yml --private-key ~/.ssh/id_rsa
 cd ..

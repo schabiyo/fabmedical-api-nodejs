@@ -1,5 +1,16 @@
 'use strict';
+if(process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
+const appInsights = require("applicationinsights");
+appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY)
+    .setAutoDependencyCorrelation(false)
+    .setAutoCollectRequests(true)
+    .setAutoCollectPerformance(true)
+    .setAutoCollectExceptions(true)
+    .setAutoCollectDependencies(true)
+    .start();
+} else {
 
+}
 var express = require('express');
 var bodyParser = require('body-parser');
 var routes = require('./routes');
